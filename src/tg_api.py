@@ -67,32 +67,29 @@ class TelegramBot:
         except Exception as e:
             logging.error(f"Error occurred while posting to Telegram: {e}")
 
-    async def send_image_quizzes(self, chats: dict, questions: dict, images: dict):
-        for language, questions_lst in questions.items():
-            try:
-                # Convert the PIL image to a byte array
-                byte_array = BytesIO()
-                images[language].save(byte_array, format='PNG')
-                byte_array.seek(0)
+    async def send_image_quizzes(self, chat: str, quiz: dict, image):
+        try:
+            # Convert the PIL image to a byte array
+            byte_array = BytesIO()
+            image.save(byte_array, format='PNG')
+            byte_array.seek(0)
 
-                # Send the image to the specified chat
-                await self.bot.send_photo(chat_id=chats[language], photo=byte_array)
-                logging.info("Image successfully posted to Telegram channel.")
-            except Exception as e:
-                logging.error(f"Error occurred while posting to Telegram: {e}")
-            for question in questions_lst:
-                try:
-                    await self.bot.send_poll(
-                        chat_id=chats[language],
-                        question="Topic: " + question['grammar_topic'] + ".\n" + "\n" + question['question'],
-                        options=question['options'],
-                        type='quiz',
-                        correct_option_id=question['correct_option_id'],
-                        explanation=question['explanation'],
-                        is_anonymous=True
-                    )
-                    logging.info(f"Quiz sent successfully: {question}")
-                except Exception as e:
-                    logging.error(f"An error occurred: {e}. Tried to send {question}")
-                sleep_time = random.randint(5, 9)
-                time.sleep(sleep_time)
+            # Send the image to the specified chat
+            await self.bot.send_photo(chat_id=chat, photo=byte_array)
+            logging.info("Image successfully posted to Telegram channel.")
+        except Exception as e:
+            logging.error(f"Error occurred while posting to Telegram: {e}")
+
+        try:
+            await self.bot.send_poll(
+                chat_id=chat,
+                question=quiz['question'],
+                options=quiz['options'],
+                type='quiz',
+                correct_option_id=quiz['correct_option_id'],
+                explanation=quiz['explanation'],
+                is_anonymous=True
+            )
+            logging.info(f"Quiz sent successfully: {quiz}")
+        except Exception as e:
+            logging.error(f"An error occurred: {e}. Tried to send {quiz}")

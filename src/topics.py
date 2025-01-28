@@ -30,13 +30,13 @@ class ContentFetcher:
 class Intro:
     def pick_random(self, pick_from: str = 'movies') -> str:
         """Pick a random item from the specified list."""
-        if pick_from == 'songs':
+        if pick_from == 'song':
             return random.choice(self.songs)
-        elif pick_from == 'books':
+        elif pick_from == 'book':
             return random.choice(self.books)
-        elif pick_from == 'movies':
+        elif pick_from == 'movie':
             return random.choice(self.movies)
-        elif pick_from == 'tv_shows':
+        elif pick_from == 'tv_show':
             return random.choice(self.tv_shows)
         else:
             raise ValueError("Invalid list specified. Use 'books' or 'movies'.")
@@ -75,13 +75,13 @@ class Intro:
 class Topic:
     def pick_random(self, pick_from: str = 'movies', n_options: int = 5) -> str:
         """Pick a random item from the specified list."""
-        if pick_from == 'songs':
+        if pick_from == 'song':
             return random.sample(self.songs, n_options)
-        elif pick_from == 'books':
+        elif pick_from == 'book':
             return random.sample(self.books, n_options)
-        elif pick_from == 'movies':
+        elif pick_from == 'movie':
             return random.sample(self.movies, n_options)
-        elif pick_from == 'tv_shows':
+        elif pick_from == 'tv_show':
             return random.sample(self.tv_shows, n_options)
         else:
             raise ValueError("Invalid list specified. Use 'books' or 'movies'.")
