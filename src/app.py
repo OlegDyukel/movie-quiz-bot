@@ -31,9 +31,9 @@ def get_quiz() -> dict:
     question = intro.pick_random(params.SCHEDULE[day_name])
     options = topic.pick_random(params.SCHEDULE[day_name], n_options=params.N_options)
     correct_id = random.randint(0, len(options))
+    explanation = intro.get_explanation()
     return {'topic': params.SCHEDULE[day_name], 'question': question, 'options': options,
-            'correct_option_id': correct_id, "correct_option": options[correct_id],
-            'explanation': 'What worlds GPT dreams of, only the stars may know.'}
+            'correct_option_id': correct_id, "correct_option": options[correct_id], 'explanation': explanation}
 
 
 def get_description(model, topic: str, art_item: str) -> str:

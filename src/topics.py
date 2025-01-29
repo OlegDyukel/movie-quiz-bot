@@ -28,6 +28,9 @@ class ContentFetcher:
 
 @dataclass
 class Intro:
+    def get_explanation(self) -> str:
+        return 'What worlds GPT dreams of, only the stars may know'
+
     def pick_random(self, pick_from: str = 'movies') -> str:
         """Pick a random item from the specified list."""
         if pick_from == 'song':
