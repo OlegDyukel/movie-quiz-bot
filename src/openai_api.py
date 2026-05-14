@@ -4,6 +4,7 @@ from io import BytesIO
 from PIL import Image
 import requests
 import logging
+import base64
 
 class OpenaiAPI:
 
@@ -28,15 +29,19 @@ class OpenaiAPI:
             logging.error(f"An error occurred: {e}")
             return None
 
-    def generate_image(self, prompt, model="dall-e-3"):
+    def generate_image(self, prompt, model="gpt-image-2"):
         # https://github.com/openai/openai-python/blob/main/examples/picture.py
         try:
-            # Request image generation from DALL-E using the updated API
-            response = openai.images.generate(prompt=prompt, model=model)
-            # Download the image
-            response = requests.get(response.data[0].url)
-            image = Image.open(BytesIO(response.content))
-            return image
+            img_resp = self.client.images.generate(prompt=prompt, model=model)
+            data = img_resp.data[0]
+            if getattr(data, "b64_json", None):
+                image_bytes = base64.b64decode(data.b64_json)
+                return Image.open(BytesIO(image_bytes))
+            if getattr(data, "url", None):
+                response = requests.get(data.url)
+                return Image.open(BytesIO(response.content))
+            logging.error("OpenAI generate_image: no image data in response")
+            return None
         except openai.OpenAIError as e:
             logging.error(f"An error occurred: {e}")
             return None
